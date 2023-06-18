@@ -151,6 +151,14 @@ plt.show(block=False)
 best_Jab_disc = generate_sunflower_disc(**best_params)
 best_rgb_disc = Jab_to_rgb(best_Jab_disc)
 
+scatter_points = 1024
+if scatter_points > 0:
+    wall_scatter = rng.normal(size=(scatter_points, 3))
+    wall_scatter *= np.sqrt(3) / np.linalg.norm(wall_scatter, axis=-1)[..., np.newaxis]
+    wall_scatter = np.clip(wall_scatter + 0.5, 0, 1)
+    best_rgb_disc = np.vstack([best_rgb_disc, wall_scatter])
+    best_Jab_disc = rgb_to_Jab(best_rgb_disc)
+
 fig, (Jab_ax, rgb_ax) = plt.subplots(ncols=2, subplot_kw=dict(projection="3d"))
 
 Jab_ax.scatter(*best_Jab_disc.T, c=best_rgb_disc, alpha=1)
